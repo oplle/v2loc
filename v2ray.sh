@@ -34,13 +34,6 @@ CONFIG_FILE="/etc/v2ray/config.json"
 SERVICE_FILE="/etc/systemd/system/v2ray.service"
 OS=`hostnamectl | grep -i system | cut -d: -f2`
 
-V6_PROXY=""
-IP=`curl -sL -4 i111p.sb`
-if [[ "$?" != "0" ]]; then
-    IP=`curl -sL -6 i111p.sb`
-    V6_PROXY="https://gh.hi111jk.art/"
-fi
-
 BT="false"
 NGINX_CONF_PATH="/etc/nginx/conf.d/"
 res=`which bt 2>/dev/null`
@@ -170,6 +163,28 @@ normalizeVersion() {
     else
         echo ""
     fi
+}
+
+# 1: new V2Ray. 0: no. 1: yes. 2: not installed. 3: check failed.
+getVersion() {
+    VER="$(/usr/bin/v2ray/v2ray -version 2>/dev/null)"
+    RETVAL=$?
+    CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
+    TAG_URL="$https://api.github.com/repos/v2fly/v2ray-core/releases/latest"
+    NEW_VER="$(normalizeVersion "$(curl -s "${TAG_URL}" --connect-timeout 10| tr ',' '\n' | grep 'tag_name' | cut -d\" -f4)")"
+    if [[ "$XTLS" = "true" ]]; then
+        NEW_VER=v4.32.1
+    fi
+
+    if [[ $? -ne 0 ]] || [[ $NEW_VER == "" ]]; then
+        colorEcho $RED " 检查V2ray版本信息失败，请检查网络"
+        return 3
+    elif [[ $RETVAL -ne 0 ]];then
+        return 2
+    elif [[ $NEW_VER != $CUR_VER ]];then
+        return 1
+    fi
+    return 0
 }
 
 archAffix(){
@@ -776,7 +791,7 @@ installBBR() {
 
     colorEcho $BLUE " 安装BBR模块..."
     if [[ "$PMT" = "yum" ]]; then
-        if [[ "$V6_PROXY" = "" ]]; then
+        if [[ "" = "" ]]; then
             rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
             rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
             $CMD_INSTALL --enablerepo=elrepo-kernel kernel-ml
@@ -796,7 +811,7 @@ installBBR() {
 installV2ray() {
     rm -rf /tmp/v2ray
     mkdir -p /tmp/v2ray
-    DOWNLOAD_LINK="${V6_PROXY}https://github.com/v2fly/v2ray-core/releases/download/${NEW_VER}/v2ray-linux-$(archAffix).zip"
+    DOWNLOAD_LINK="$https://github.com/v2fly/v2ray-core/releases/download/${NEW_VER}/v2ray-linux-$(archAffix).zip"
     colorEcho $BLUE " 下载V2Ray: ${DOWNLOAD_LINK}"
     curl -L -H "Cache-Control: no-cache" -o /tmp/v2ray/v2ray.zip ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
