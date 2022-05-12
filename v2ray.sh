@@ -34,6 +34,13 @@ CONFIG_FILE="/etc/v2ray/config.json"
 SERVICE_FILE="/etc/systemd/system/v2ray.service"
 OS=`hostnamectl | grep -i system | cut -d: -f2`
 
+V6_PROXY=""
+IP=`curl -sL -4 i111p.sb`
+if [[ "$?" != "0" ]]; then
+    IP=`curl -sL -6 i111p.sb`
+    V6_PROXY=""
+fi
+
 BT="false"
 NGINX_CONF_PATH="/etc/nginx/conf.d/"
 res=`which bt 2>/dev/null`
@@ -769,7 +776,7 @@ installBBR() {
 
     colorEcho $BLUE " 安装BBR模块..."
     if [[ "$PMT" = "yum" ]]; then
-        if [[ "" = "" ]]; then
+        if [[ "$V6_PROXY" = "" ]]; then
             rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
             rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
             $CMD_INSTALL --enablerepo=elrepo-kernel kernel-ml
@@ -789,7 +796,7 @@ installBBR() {
 installV2ray() {
     rm -rf /tmp/v2ray
     mkdir -p /tmp/v2ray
-    DOWNLOAD_LINK="$https://github.com/v2fly/v2ray-core/releases/download/${NEW_VER}/v2ray-linux-$(archAffix).zip"
+    DOWNLOAD_LINK="${V6_PROXY}https://github.com/v2fly/v2ray-core/releases/download/v4.44.0/v2ray-linux-$(archAffix).zip"
     colorEcho $BLUE " 下载V2Ray: ${DOWNLOAD_LINK}"
     curl -L -H "Cache-Control: no-cache" -o /tmp/v2ray/v2ray.zip ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
@@ -1358,7 +1365,7 @@ install() {
     elif [[ $RETVAL == 3 ]]; then
         exit 1
     else
-        colorEcho $BLUE " 安装V2Ray ${NEW_VER} ，架构$(archAffix)"
+        colorEcho $BLUE " 安装V2Ray v4.44.0 ，架构$(archAffix)"
         installV2ray
     fi
 
@@ -1398,7 +1405,7 @@ update() {
     elif [[ $RETVAL == 3 ]]; then
         exit 1
     else
-        colorEcho $BLUE " 安装V2Ray ${NEW_VER} ，架构$(archAffix)"
+        colorEcho $BLUE " 安装V2Ray v4.44.0 ，架构$(archAffix)"
         installV2ray
         stop
         start
