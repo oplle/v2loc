@@ -1,5 +1,5 @@
 #!/bin/bash
-# v2ray一键安装脚本
+# v2一键安装脚本
 # Author: hi111jk<https://hi111jk.art>
 
 
