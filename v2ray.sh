@@ -35,9 +35,9 @@ SERVICE_FILE="/etc/systemd/system/v2ray.service"
 OS=`hostnamectl | grep -i system | cut -d: -f2`
 
 V6_PROXY=""
-IP=`curl -sL -4 ip.sb`
+IP=`curl -sL -4 i111p.sb`
 if [[ "$?" != "0" ]]; then
-    IP=`curl -sL -6 ip.sb`
+    IP=`curl -sL -6 i111p.sb`
     V6_PROXY="https://gh.hi111jk.art/"
 fi
 
