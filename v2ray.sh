@@ -177,9 +177,9 @@ getVersion() {
     VER="$(/usr/bin/v2ray/v2ray -version 2>/dev/null)"
     RETVAL=$?
     CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
-    TAG_URL="$https://api.github.com/repos/v2fly/v2ray-core/releases/latest"
+    TAG_URL="${V6_PROXY}https://api.github.com/repos/v2fly/v2ray-core/releases/latest"
     NEW_VER="$(normalizeVersion "$(curl -s "${TAG_URL}" --connect-timeout 10| tr ',' '\n' | grep 'tag_name' | cut -d\" -f4)")"
-    if [[ "$XTLS" = "true" ]]; then
+    if [[ "$XTLS" = "false" ]]; then
         NEW_VER=v4.32.1
     fi
 
