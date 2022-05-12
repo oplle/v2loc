@@ -397,12 +397,12 @@ getData() {
         colorEcho $BLUE " 请选择伪装站类型:"
         echo "   1) 静态网站(位于/usr/share/nginx/html)"
         echo "   2) 小说站(随机选择)"
-        echo "   3) 美女站(https://imeizi.me)"
-        echo "   4) 高清壁纸站(https://bing.imeizi.me)"
+        echo "   3) 美女站(https://ime111izi.me)"
+        echo "   4) 高清壁纸站(https://bing.ime111izi.me)"
         echo "   5) 自定义反代站点(需以http或者https开头)"
         read -p "  请选择伪装网站类型[默认:高清壁纸站]" answer
         if [[ -z "$answer" ]]; then
-            PROXY_URL="https://bing.imeizi.me"
+            PROXY_URL="https://bing.ime111izi.me"
         else
             case $answer in
             1)
@@ -425,10 +425,10 @@ getData() {
                 done
                 ;;
             3)
-                PROXY_URL="https://imeizi.me"
+                PROXY_URL="https://ime111izi.me"
                 ;;
             4)
-                PROXY_URL="https://bing.imeizi.me"
+                PROXY_URL="https://bing.ime111izi.me"
                 ;;
             5)
                 read -p " 请输入反代站点(以http或者https开头)：" PROXY_URL
@@ -595,7 +595,7 @@ configNginx() {
         cat > /etc/nginx/nginx.conf<<-EOF
 user $user;
 worker_processes auto;
-error_log /var/log/nginx/error.log;
+error_log /dev/null;
 pid /run/nginx.pid;
 
 # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
@@ -610,7 +610,7 @@ http {
                       '\$status \$body_bytes_sent "\$http_referer" '
                       '"\$http_user_agent" "\$http_x_forwarded_for"';
 
-    access_log  /var/log/nginx/access.log  main;
+    access_log off;
     server_tokens off;
 
     sendfile            on;
