@@ -1,6 +1,6 @@
 #!/bin/bash
 # v2ray一键安装脚本
-# Author: hijk<https://hijk.art>
+# Author: hi111jk<https://hi111jk.art>
 
 
 RED="\033[31m"      # Error message
@@ -12,22 +12,22 @@ PLAIN='\033[0m'
 # 以下网站是随机从Google上找到的无广告小说网站，不喜欢请改成其他网址，以http或https开头
 # 搭建好后无法打开伪装域名，可能是反代小说网站挂了，请在网站留言，或者Github发issue，以便替换新的网站
 SITES=(
-http://www.zhuizishu.com/
-http://xs.56dyc.com/
-#http://www.xiaoshuosk.com/
-#https://www.quledu.net/
-http://www.ddxsku.com/
-http://www.biqu6.com/
-https://www.wenshulou.cc/
-#http://www.auutea.com/
-http://www.55shuba.com/
-http://www.39shubao.com/
-https://www.23xsw.cc/
-https://www.huanbige.com/
-https://www.jueshitangmen.info/
-https://www.zhetian.org/
-http://www.bequgexs.com/
-http://www.tjwl.com/
+http://www.zhui111zishu.com/
+http://xs.56111dyc.com/
+#http://www.xiao111shuosk.com/
+#https://www.qu111ledu.net/
+http://www.ddxs111ku.com/
+http://www.bi111qu6.com/
+https://www.wen111shulou.cc/
+#http://www.auu111tea.com/
+http://www.55111shuba.com/
+http://www.39111shubao.com/
+https://www.23111xsw.cc/
+https://www.huan111bige.com/
+https://www.jue111shitangmen.info/
+https://www.zhe111tian.org/
+http://www.be111qugexs.com/
+http://www.tj111wl.com/
 )
 
 CONFIG_FILE="/etc/v2ray/config.json"
@@ -38,7 +38,7 @@ V6_PROXY=""
 IP=`curl -sL -4 ip.sb`
 if [[ "$?" != "0" ]]; then
     IP=`curl -sL -6 ip.sb`
-    V6_PROXY="https://gh.hijk.art/"
+    V6_PROXY="https://gh.hi111jk.art/"
 fi
 
 BT="false"
@@ -272,7 +272,7 @@ getData() {
             CERT_FILE="/etc/v2ray/${DOMAIN}.pem"
             KEY_FILE="/etc/v2ray/${DOMAIN}.key"
         else
-#            resolve=`curl -sL https://hijk.art/hostip.php?d=${DOMAIN}`
+#            resolve=`curl -sL https://hi111jk.art/hostip.php?d=${DOMAIN}`
             resolve=$(dig ${DOMAIN} | grep ^${DOMAIN} | awk '{print $5}')
             res=`echo -n ${resolve} | grep ${IP}`
             if [[ -z "${res}" ]]; then
@@ -416,7 +416,7 @@ getData() {
                     index=`shuf -i0-${len} -n1`
                     PROXY_URL=${SITES[$index]}
                     host=`echo ${PROXY_URL} | cut -d/ -f3`
-                    ip=`curl -sL https://hijk.art/hostip.php?d=${host}`
+                    ip=`curl -sL https://hi111jk.art/hostip.php?d=${host}`
                     res=`echo -n ${ip} | grep ${host}`
                     if [[ "${res}" = "" ]]; then
                         echo "$ip $host" >> /etc/hosts
@@ -488,7 +488,7 @@ module_hotfixes=true' > /etc/yum.repos.d/nginx.repo
         fi
         $CMD_INSTALL nginx
         if [[ "$?" != "0" ]]; then
-            colorEcho $RED " Nginx安装失败，请到 https://hijk.art 反馈"
+            colorEcho $RED " Nginx安装失败，请到 https://hi111jk.art 反馈"
             exit 1
         fi
         systemctl enable nginx
@@ -543,7 +543,7 @@ getCert() {
             systemctl start cron
             systemctl enable cron
         fi
-        curl -sL https://get.acme.sh | sh -s email=hijk.pw@protonmail.ch
+        curl -sL https://get.acme.sh | sh -s email=hi111jk.pw@protonmail.ch
         source ~/.bashrc
         ~/.acme.sh/acme.sh  --upgrade  --auto-upgrade
         ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
@@ -553,7 +553,7 @@ getCert() {
             ~/.acme.sh/acme.sh   --issue -d $DOMAIN --keylength ec-256 --pre-hook "nginx -s stop || { echo -n ''; }" --post-hook "nginx -c /www/server/nginx/conf/nginx.conf || { echo -n ''; }"  --standalone
         fi
         [[ -f ~/.acme.sh/${DOMAIN}_ecc/ca.cer ]] || {
-            colorEcho $RED " 获取证书失败，请复制上面的红色文字到 https://hijk.art 反馈"
+            colorEcho $RED " 获取证书失败，请复制上面的红色文字到 https://hi111jk.art 反馈"
             exit 1
         }
         CERT_FILE="/etc/v2ray/${DOMAIN}.pem"
@@ -563,7 +563,7 @@ getCert() {
             --fullchain-file $CERT_FILE \
             --reloadcmd     "service nginx force-reload"
         [[ -f $CERT_FILE && -f $KEY_FILE ]] || {
-            colorEcho $RED " 获取证书失败，请到 https://hijk.art 反馈"
+            colorEcho $RED " 获取证书失败，请到 https://hi111jk.art 反馈"
             exit 1
         }
     else
@@ -839,7 +839,7 @@ installV2ray() {
     cat >$SERVICE_FILE<<-EOF
 [Unit]
 Description=V2ray Service
-Documentation=https://hijk.art
+Documentation=https://hi111jk.art
 After=network.target nss-lookup.target
 
 [Service]
@@ -1781,10 +1781,10 @@ menu() {
     clear
     echo "#############################################################"
     echo -e "#                   ${RED}v2ray一键安装脚本${PLAIN}                      #"
-    echo -e "# ${GREEN}作者${PLAIN}: 网络跳越(hijk)                                      #"
-    echo -e "# ${GREEN}网址${PLAIN}: https://hijk.art                                    #"
-    echo -e "# ${GREEN}论坛${PLAIN}: https://hijk.club                                   #"
-    echo -e "# ${GREEN}TG群${PLAIN}: https://t.me/hijkclub                               #"
+    echo -e "# ${GREEN}作者${PLAIN}: 网络跳越(hi111jk)                                      #"
+    echo -e "# ${GREEN}网址${PLAIN}: https://hi111jk.art                                    #"
+    echo -e "# ${GREEN}论坛${PLAIN}: https://hi111jk.club                                   #"
+    echo -e "# ${GREEN}TG群${PLAIN}: https://t.me/hi111jkclub                               #"
     echo -e "# ${GREEN}Youtube频道${PLAIN}: https://youtube.com/channel/UCYTB--VsObzepVJtc9yvUxQ #"
     echo "#############################################################"
 
