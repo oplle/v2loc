@@ -264,8 +264,8 @@ getData() {
     echo ""
     if [[ "$(needNginx)" = "no" ]]; then
         if [[ "$TLS" = "true" ]]; then
-            read -p " 请输入v2ray监听端口[强烈建议443，默认443]：" PORT
-            [[ -z "${PORT}" ]] && PORT=443
+            read -p " 请输入v2ray监听端口[强烈建议443，默认3443]：" PORT
+            [[ -z "${PORT}" ]] && PORT=3443
         else
             read -p " 请输入v2ray监听端口[100-65535的一个数字]：" PORT
             [[ -z "${PORT}" ]] && PORT=`shuf -i200-65000 -n1`
@@ -276,8 +276,8 @@ getData() {
         fi
         colorEcho ${BLUE}  " v2ray端口：$PORT"
     else
-        read -p " 请输入Nginx监听端口[100-65535的一个数字，默认443]：" PORT
-        [[ -z "${PORT}" ]] && PORT=443
+        read -p " 请输入Nginx监听端口[100-65535的一个数字，默认3443]：" PORT
+        [[ -z "${PORT}" ]] && PORT=3443
         if [ "${PORT:0:1}" = "0" ]; then
             colorEcho ${BLUE}  " 端口不能以0开头"
             exit 1
@@ -378,9 +378,9 @@ getData() {
         echo "   3) 美女站(https://ime111izi.me)"
         echo "   4) 高清壁纸站(https://bing.ime111izi.me)"
         echo "   5) 自定义反代站点(需以http或者https开头)"
-        read -p "  请选择伪装网站类型[默认:高清壁纸站]" answer
+        read -p "  请选择伪装网站类型[原默认: 4 已修改跟 1 一样]" answer
         if [[ -z "$answer" ]]; then
-            PROXY_URL="https://bing.ime111izi.me"
+            PROXY_URL=""
         else
             case $answer in
             1)
@@ -406,7 +406,7 @@ getData() {
                 PROXY_URL="https://ime111izi.me"
                 ;;
             4)
-                PROXY_URL="https://bing.ime111izi.me"
+                PROXY_URL=""
                 ;;
             5)
                 read -p " 请输入反代站点(以http或者https开头)：" PROXY_URL
